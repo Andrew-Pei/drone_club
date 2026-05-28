@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重庆八中 无人机社团</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">✈</span>
+            <span class="nav-title">重庆八中 · 无人机社团</span>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="菜单">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" class="nav-link active" data-page="home">首页</a></li>
+            <li><a href="#" class="nav-link" data-page="rules">社团规章</a></li>
+            <li><a href="#" class="nav-link" data-page="competitions">赛项规则</a></li>
+            <li><a href="#" class="nav-link" data-page="materials">培训资料</a></li>
+        </ul>
+    </nav>
+
+    <!-- 首页 -->
+    <section class="page active" id="page-home">
+        <div class="hero">
+            <div class="hero-content">
+                <h1>重庆八中无人机社团</h1>
+                <p>翱翔蓝天，智领未来</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">参赛赛项</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">探索精神</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="section-header">
+                <h2>社团简介</h2>
+            </div>
+            <div class="intro-card">
+                <p>重庆八中无人机社团致力于培养学生在无人机领域的兴趣与技能，涵盖编程控制、飞行操控、目标侦查等多个方向。社团成员在各类无人机竞赛中屡获佳绩，是学校科技创新的重要力量。</p>
+            </div>
+            <div class="section-header">
+                <h2>快速导航</h2>
+            </div>
+            <div class="quick-nav">
+                <a href="#" class="quick-nav-card" data-goto="rules">
+                    <div class="quick-nav-icon">📋</div>
+                    <h3>社团规章</h3>
+                    <p>查看社团规则与管理办法</p>
+                </a>
+                <a href="#" class="quick-nav-card" data-goto="competitions">
+                    <div class="quick-nav-icon">🏆</div>
+                    <h3>赛项规则</h3>
+                    <p>了解各赛项规则与要求</p>
+                </a>
+                <a href="#" class="quick-nav-card" data-goto="materials">
+                    <div class="quick-nav-icon">📚</div>
+                    <h3>培训资料</h3>
+                    <p>下载培训课件与学习资源</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 社团规章 -->
+    <section class="page" id="page-rules">
+        <div class="container">
+            <div class="section-header">
+                <h2>社团规章</h2>
+                <p>规范管理，共同进步</p>
+            </div>
+            <div id="rules-content"></div>
+        </div>
+    </section>
+
+    <!-- 赛项规则 -->
+    <section class="page" id="page-competitions">
+        <div class="container">
+            <div class="section-header">
+                <h2>赛项规则</h2>
+                <p>了解规则，备战比赛</p>
+            </div>
+            <div id="competitions-content"></div>
+        </div>
+    </section>
+
+    <!-- 培训资料 -->
+    <section class="page" id="page-materials">
+        <div class="container">
+            <div class="section-header">
+                <h2>培训资料</h2>
+                <p>学习资源，持续提升</p>
+            </div>
+
+            <!-- 上传区域 -->
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📤</div>
+                    <p>点击或拖拽文件到此处上传</p>
+                    <p class="upload-hint">支持 PPT、PDF、Word、图片等格式</p>
+                    <input type="file" id="fileInput" multiple accept=".ppt,.pptx,.pdf,.doc,.docx,.jpg,.png,.mp4">
+                </div>
+                <div class="upload-meta" id="uploadMeta" style="display:none;">
+                    <div class="form-group">
+                        <label for="fileCategory">资料分类</label>
+                        <select id="fileCategory">
+                            <option value="training">培训课件</option>
+                            <option value="tutorial">操作教程</option>
+                            <option value="reference">参考资料</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fileDesc">资料描述</label>
+                        <input type="text" id="fileDesc" placeholder="简要描述该资料内容">
+                    </div>
+                    <button class="btn btn-primary" id="confirmUpload">确认上传</button>
+                    <button class="btn btn-secondary" id="cancelUpload">取消</button>
+                </div>
+            </div>
+
+            <!-- 资料列表 -->
+            <div class="materials-filter">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="training">培训课件</button>
+                <button class="filter-btn" data-filter="tutorial">操作教程</button>
+                <button class="filter-btn" data-filter="reference">参考资料</button>
+                <button class="filter-btn" data-filter="other">其他</button>
+            </div>
+            <div id="materials-content"></div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <p>© 2026 重庆八中无人机社团 | 翱翔蓝天，智领未来</p>
+    </footer>
+
+    <script src="js/rules.js"></script>
+    <script src="js/competitions.js"></script>
+    <script src="js/materials.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
