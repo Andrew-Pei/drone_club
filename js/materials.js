@@ -1,9 +1,9 @@
 /**
- * 培训资料模块 — Cloudflare Worker 后端版
+ * 培训资料模块 — Vercel Serverless 后端版
  */
 
-// Worker API 地址（部署后替换为实际 URL）
-const API_BASE = 'https://drone-club-api.2844490052.workers.dev';
+// Vercel API 地址（部署后替换为实际 URL）
+const API_BASE = 'https://drone-club-six.vercel.app';
 
 let pendingFiles = [];
 
@@ -63,7 +63,7 @@ async function renderMaterials(filter = 'all') {
         ${m.description ? `<p class="material-desc">${escapeHtml(m.description)}</p>` : ''}
       </div>
       <div class="material-actions">
-        <a href="${API_BASE}/api/materials/${m.id}/download" class="btn btn-primary">下载</a>
+        <a href="${m.downloadUrl || `${API_BASE}/api/materials/${m.id}/download`}" class="btn btn-primary" target="_blank">下载</a>
         <button class="btn btn-delete" onclick="handleDelete('${m.id}')">删除</button>
       </div>
     </div>
