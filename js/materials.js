@@ -1,27 +1,62 @@
 /**
- * 培训资料模块 — Vercel Serverless 后端版
+ * Training materials module.
  */
 
-// Vercel API 地址（部署后替换为实际 URL）
-const API_BASE = 'https://drone-club-six.vercel.app';
+const MATERIALS_CONFIG = window.DRONE_CLUB_CONFIG || {};
+const API_BASE = (MATERIALS_CONFIG.apiBase || window.location.origin).replace(/\/$/, '');
+const ADMIN_TOKEN_KEY = MATERIALS_CONFIG.adminTokenStorageKey || 'droneClubAdminToken';
 
 let pendingFiles = [];
 
+function getAdminToken() {
+  return sessionStorage.getItem(ADMIN_TOKEN_KEY) || '';
+}
+
+function requestAdminToken() {
+  const current = getAdminToken();
+  const token = prompt('请输入管理员口令', current);
+  if (!token) return '';
+  sessionStorage.setItem(ADMIN_TOKEN_KEY, token.trim());
+  return token.trim();
+}
+
+function authHeaders() {
+  const token = requestAdminToken();
+  return token ? { Authorization: `Bearer ${token}` } : null;
+}
+
+async function fetchJson(url, options) {
+  const resp = await fetch(url, options);
+  if (!resp.ok) {
+    let message = resp.statusText || '请求失败';
+    try {
+      const body = await resp.json();
+      message = body.error || message;
+    } catch {
+      // Ignore non-JSON error bodies.
+    }
+    throw new Error(message);
+  }
+  return resp.json();
+}
+
 /**
- * 从 Worker 获取资料列表
+ * Get materials from the API.
  */
 async function getMaterials() {
   try {
-    const resp = await fetch(`${API_BASE}/api/materials`);
-    if (!resp.ok) return [];
-    return await resp.json();
-  } catch {
+    return await fetchJson(`${API_BASE}/api/materials`);
+  } catch (err) {
     return [];
   }
 }
 
+function getDisplayName(material) {
+  return material.originalName || material.fileName || material.name || material.id || '未命名资料';
+}
+
 /**
- * 渲染资料列表
+ * Render materials list.
  */
 async function renderMaterials(filter = 'all') {
   const container = document.getElementById('materials-content');
@@ -49,32 +84,38 @@ async function renderMaterials(filter = 'all') {
   };
 
   container.innerHTML = materials
-    .map(
-      (m) => `
-    <div class="material-card" data-id="${m.id}">
-      <div class="material-icon">${getMaterialIcon(m.fileName)}</div>
-      <div class="material-info">
-        <h4>${escapeHtml(m.fileName)}</h4>
-        <div class="material-meta">
-          <span>${categoryMap[m.category] || m.category}</span>
-          <span>${m.fileSize}</span>
-          <span>${m.uploadTime}</span>
+    .map((m) => {
+      const displayName = getDisplayName(m);
+      const downloadUrl = m.downloadUrl || m.url || `${API_BASE}/api/materials/${encodeURIComponent(m.id)}/download`;
+      return `
+        <div class="material-card" data-id="${escapeHtml(m.id)}">
+          <div class="material-icon">${getMaterialIcon(displayName)}</div>
+          <div class="material-info">
+            <h4>${escapeHtml(displayName)}</h4>
+            <div class="material-meta">
+              <span>${escapeHtml(categoryMap[m.category] || m.category || '其他')}</span>
+              <span>${escapeHtml(m.fileSize || '')}</span>
+              <span>${escapeHtml(m.uploadTime || '')}</span>
+            </div>
+            ${m.description ? `<p class="material-desc">${escapeHtml(m.description)}</p>` : ''}
+          </div>
+          <div class="material-actions">
+            <a href="${escapeHtml(downloadUrl)}" class="btn btn-primary" target="_blank" rel="noopener">下载</a>
+            <button class="btn btn-delete" data-delete-id="${escapeHtml(m.id)}">删除</button>
+          </div>
         </div>
-        ${m.description ? `<p class="material-desc">${escapeHtml(m.description)}</p>` : ''}
-      </div>
-      <div class="material-actions">
-        <a href="${m.downloadUrl || `${API_BASE}/api/materials/${m.id}/download`}" class="btn btn-primary" target="_blank">下载</a>
-        <button class="btn btn-delete" onclick="handleDelete('${m.id}')">删除</button>
-      </div>
-    </div>
-  `
-    )
+      `;
+    })
     .join('');
+
+  container.querySelectorAll('[data-delete-id]').forEach((button) => {
+    button.addEventListener('click', () => handleDelete(button.dataset.deleteId));
+  });
 }
 
 function escapeHtml(str) {
   const div = document.createElement('div');
-  div.textContent = str;
+  div.textContent = String(str);
   return div.innerHTML;
 }
 
@@ -95,7 +136,7 @@ function getMaterialIcon(filename) {
 }
 
 /**
- * 处理文件选择
+ * Handle file selection.
  */
 function handleFileSelect(files) {
   if (!files || files.length === 0) return;
@@ -113,9 +154,14 @@ function handleFileSelect(files) {
 }
 
 /**
- * 确认上传 — 发送到 Worker
+ * Confirm upload.
  */
 async function handleConfirmUpload() {
+  if (pendingFiles.length === 0) return;
+
+  const headers = authHeaders();
+  if (!headers) return;
+
   const category = document.getElementById('fileCategory').value;
   const description = document.getElementById('fileDesc').value;
   const confirmBtn = document.getElementById('confirmUpload');
@@ -123,38 +169,36 @@ async function handleConfirmUpload() {
   confirmBtn.disabled = true;
   confirmBtn.textContent = '上传中...';
 
-  for (const file of pendingFiles) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('category', category);
-    formData.append('description', description);
+  try {
+    for (const file of pendingFiles) {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('originalName', file.name);
+      formData.append('category', category);
+      formData.append('description', description);
 
-    try {
-      const resp = await fetch(`${API_BASE}/api/materials`, {
+      await fetchJson(`${API_BASE}/api/materials`, {
         method: 'POST',
+        headers,
         body: formData,
       });
-      if (!resp.ok) {
-        alert(`上传失败: ${file.name}`);
-      }
-    } catch (err) {
-      alert(`上传出错: ${file.name} - ${err.message}`);
     }
+
+    pendingFiles = [];
+    document.getElementById('uploadMeta').style.display = 'none';
+    document.getElementById('fileDesc').value = '';
+    document.getElementById('fileInput').value = '';
+    renderMaterials(getCurrentFilter());
+  } catch (err) {
+    alert(`上传失败: ${err.message}`);
+  } finally {
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = '确认上传';
   }
-
-  // 重置表单
-  pendingFiles = [];
-  confirmBtn.disabled = false;
-  confirmBtn.textContent = '确认上传';
-  document.getElementById('uploadMeta').style.display = 'none';
-  document.getElementById('fileDesc').value = '';
-  document.getElementById('fileInput').value = '';
-
-  renderMaterials(getCurrentFilter());
 }
 
 /**
- * 取消上传
+ * Cancel upload.
  */
 function handleCancelUpload() {
   pendingFiles = [];
@@ -164,18 +208,23 @@ function handleCancelUpload() {
 }
 
 /**
- * 删除资料
+ * Delete material.
  */
 async function handleDelete(id) {
   if (!confirm('确定要删除这份资料吗？')) return;
 
-  try {
-    await fetch(`${API_BASE}/api/materials/${id}`, { method: 'DELETE' });
-  } catch (err) {
-    alert('删除失败: ' + err.message);
-  }
+  const headers = authHeaders();
+  if (!headers) return;
 
-  renderMaterials(getCurrentFilter());
+  try {
+    await fetchJson(`${API_BASE}/api/materials/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers,
+    });
+    renderMaterials(getCurrentFilter());
+  } catch (err) {
+    alert(`删除失败: ${err.message}`);
+  }
 }
 
 function getCurrentFilter() {
@@ -184,7 +233,7 @@ function getCurrentFilter() {
 }
 
 /**
- * 初始化培训资料模块
+ * Initialize materials module.
  */
 function initMaterials() {
   const uploadArea = document.getElementById('uploadArea');
