@@ -24,7 +24,7 @@ python -m http.server 8087 --bind 127.0.0.1
 http://127.0.0.1:8087/
 ```
 
-如需调试 Serverless API：
+如需调试 API：
 
 ```bash
 npm install
@@ -33,11 +33,10 @@ npm run start
 
 ## 部署配置
 
-部署到 Vercel 时需要配置环境变量：
+部署到 Render 时需要配置环境变量：
 
 ```text
 ADMIN_TOKEN=管理员上传和删除资料时使用的口令
-BLOB_READ_WRITE_TOKEN=Vercel Blob 读写 Token
 ```
 
 前端 API 地址在 `js/config.js` 中配置。默认 `apiBase` 为空，表示使用当前站点同源 API。
@@ -48,4 +47,4 @@ BLOB_READ_WRITE_TOKEN=Vercel Blob 读写 Token
 npm run lint
 ```
 
-该命令会检查 Serverless API 文件的 Node.js 语法。
+该命令会检查 API 文件的 Node.js 语法。

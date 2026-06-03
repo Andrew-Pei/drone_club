@@ -208,7 +208,24 @@ app.get('/api/materials/:id/download', async (req, res) => {
 // Serve static files (frontend)
 app.use(express.static(path.join(__dirname)));
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Drone Club server running on port ${PORT}`);
-});
+// Start server (only when run directly, not when required by tests)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Drone Club server running on port ${PORT}`);
+  });
+}
+
+module.exports = {
+  app,
+  sendJson,
+  getBearerToken,
+  requireAdmin,
+  readIndex,
+  writeIndex,
+  normalizeField,
+  normalizeCategory,
+  sanitizeFileName,
+  formatFileSize,
+  findMaterial,
+  VALID_CATEGORIES,
+};
