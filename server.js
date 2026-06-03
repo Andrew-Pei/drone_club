@@ -128,8 +128,9 @@ app.route('/api/materials')
         const storedName = `${id}-${originalName}`;
         const destPath = path.join(UPLOAD_DIR, storedName);
 
-        // Move uploaded file to uploads directory
-        await fs.rename(file.filepath, destPath);
+        // Copy uploaded file to uploads directory (rename fails across devices in Docker)
+        await fs.copyFile(file.filepath, destPath);
+        try { await fs.unlink(file.filepath); } catch { /* ignore */ }
 
         const material = {
           id,
