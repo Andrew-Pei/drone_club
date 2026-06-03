@@ -1,6 +1,6 @@
 # 重庆八中无人机社团网站
 
-一个用于展示无人机社团信息的静态网站，包含首页、社团规章、赛项规则、培训资料和 Q&A 问答板块。培训资料模块使用 Vercel Serverless API 和 Vercel Blob 存储。
+一个用于展示无人机社团信息的网站，包含首页、社团规章、赛项规则、培训资料和 Q&A 问答板块。培训资料模块使用 Express API 和本地文件存储，通过 Render 部署。
 
 ## 功能
 
@@ -41,10 +41,8 @@ ADMIN_TOKEN=管理员上传和删除资料时使用的口令
 
 前端 API 地址在 `js/config.js` 中配置。默认 `apiBase` 为空，表示使用当前站点同源 API。
 
-## 开发检查
+## 测试
 
 ```bash
-npm run lint
+npm test
 ```
-
-该命令会检查 API 文件的 Node.js 语法。
