@@ -21,6 +21,7 @@
             <li><a href="#" class="nav-link" data-page="rules">社团规章</a></li>
             <li><a href="#" class="nav-link" data-page="competitions">赛项规则</a></li>
             <li><a href="#" class="nav-link" data-page="materials">培训资料</a></li>
+            <li><a href="#" class="nav-link" data-page="qa">Q&A 问答</a></li> <!-- 新增 -->
         </ul>
     </nav>
 
@@ -67,6 +68,12 @@
                     <div class="quick-nav-icon">📚</div>
                     <h3>培训资料</h3>
                     <p>下载培训课件与学习资源</p>
+                </a>
+                <!-- 新增 Q&A 快速导航 -->
+                <a href="#" class="quick-nav-card" data-goto="qa">
+                    <div class="quick-nav-icon">❓</div>
+                    <h3>Q&A 问答</h3>
+                    <p>提问与解答，共同学习</p>
                 </a>
             </div>
         </div>
@@ -141,6 +148,17 @@
         </div>
     </section>
 
+    <!--  Q&A 问答板块 -->
+    <section class="page" id="page-qa">
+        <div class="container">
+            <div class="section-header">
+                <h2>Q&A 问答</h2>
+                <p>提问解惑，共同成长</p>
+            </div>
+            <div id="qaList"></div>
+        </div>
+    </section>
+
     <!-- 页脚 -->
     <footer class="footer">
         <p>© 2026 重庆八中无人机社团 | 翱翔蓝天，智领未来</p>
@@ -149,6 +167,7 @@
     <script src="js/rules.js"></script>
     <script src="js/competitions.js"></script>
     <script src="js/materials.js"></script>
+    <script src="js/qa.js"></script> <!-- 新增 QA 脚本 -->
     <script src="js/app.js"></script>
 </body>
 </html>

@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRules();
     renderCompetitions();
     initMaterials();
+    initQA();
 });
 
 /**
