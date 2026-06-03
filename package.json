@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "vercel dev",
-    "lint": "node -c api/materials.js && node -c api/materials/[id].js && node -c api/materials/[id]/download.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
-    "@vercel/blob": "^2.4.0",
+    "express": "^4.21.0",
     "formidable": "^3.5.4"
-  },
-  "devDependencies": {
-    "vercel": "^41.7.1"
   }
 }

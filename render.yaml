@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: drone-club
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_TOKEN
+        sync: false
+      - key: UPLOAD_DIR
+        value: /opt/render/project/src/uploads
+    disk:
+      name: drone-club-data
+      mountPath: /opt/render/project/src/uploads
+      sizeGB: 1
