@@ -897,3 +897,38 @@ a:hover {
   color: #666;
   line-height: 1.6;
 }
+
+/* Q&A Tabs */
+.qa-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.qa-tab {
+  padding: 8px 20px;
+  border: 2px solid var(--primary);
+  border-radius: 25px;
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qa-tab:hover {
+  background: var(--primary-light);
+}
+
+.qa-tab.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.qa-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
