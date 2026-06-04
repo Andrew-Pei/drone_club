@@ -10,14 +10,13 @@ const competitionsData = [
         badge: '热门',
         description: '参赛选手通过编写程序控制无人机完成指定任务。考验选手的编程能力、逻辑思维和任务规划能力。选手需在规定时间内完成航线规划、目标识别、精准降落等编程挑战。',
         rules: [
-            '比赛时间为 XX 分钟',
+            '比赛形式为编程越障任务',
             '无人机须按照程序自主飞行，不得人工干预',
-            '完成指定任务获得相应分数',
+            '完成指定越障任务获得相应分数',
             '触碰障碍物扣分'
         ],
         files: [
-            // TODO: 上传规则文件后替换
-            // { name: '编程挑战赛规则.pdf', size: '2.3MB', url: 'assets/uploads/xxx.pdf' }
+            { name: '编程挑战赛比赛规则（编程越障任务）.pdf', size: '549 KB', url: 'assets/rules/programming.pdf' }
         ]
     },
     {
@@ -27,13 +26,13 @@ const competitionsData = [
         badge: '竞技',
         description: '参赛选手操控无人机在指定区域内搜索并识别目标。考验选手的飞行操控技巧、观察能力和快速反应能力。需要在复杂环境中精准定位目标并完成侦查任务。',
         rules: [
-            '比赛时间为 XX 分钟',
+            '比赛形式为侦察救援任务',
             '需在规定区域内搜索指定目标',
             '正确识别目标获得分数',
             '超时未完成按已识别目标计分'
         ],
         files: [
-            // TODO: 上传规则文件后替换
+            { name: '目标侦察赛比赛规则（侦察救援任务）.pdf', size: '346 KB', url: 'assets/rules/reconnaissance.pdf' }
         ]
     },
     {
@@ -49,23 +48,23 @@ const competitionsData = [
             '降落精准度为主要评分标准'
         ],
         files: [
-            // TODO: 上传规则文件后替换
+            { name: '模拟飞行赛比赛规则（定点返场任务）.pdf', size: '441 KB', url: 'assets/rules/simulation-fixed.pdf' }
         ]
     },
     {
         id: 'simulation-large',
-        title: '模拟飞行赛 · 大飞机返场',
+        title: '模拟飞行赛 · 大飞机转场',
         icon: '✈',
         badge: '模拟',
-        description: '在模拟飞行环境中，选手操控大型飞机完成长途飞行任务后安全返场降落。与定点返场相比，大飞机返场更注重飞行规划的合理性和对大型飞机操控特性的理解。',
+        description: '在模拟飞行环境中，选手操控大型飞机完成长途转场飞行任务后安全降落。与定点返场相比，大飞机转场更注重飞行规划的合理性和对大型飞机操控特性的理解。',
         rules: [
             '须完成完整飞行计划',
             '大飞机操控需考虑惯性等因素',
-            '返场进近须符合规范',
+            '转场进近须符合规范',
             '安全着陆为首要评判标准'
         ],
         files: [
-            // TODO: 上传规则文件后替换
+            { name: '模拟飞行赛比赛规则（大飞机转场任务）.pdf', size: '300 KB', url: 'assets/rules/simulation-large.pdf' }
         ]
     }
 ];
