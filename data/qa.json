@@ -9,7 +9,7 @@
     "id": "q2",
     "category": "programming",
     "title": "如何配置无人机？",
-    "content": "点击无人机WiFi符号的按钮，IP地址：192.168.31.XXX（填无人机编号，如109）；Wi-Fi账号：CQBZ001；Wi-Fi密码：cqbz8888；初始位置0，0，0，点击保存。"
+    "content": "点击无人机WiFi符号的按钮，IP地址：192.168.31.XXX（XXX填无人机编号，如109）；Wi-Fi账号：CQBZ001；Wi-Fi密码：cqbz8888；初始位置0，0，0，点击保存。"
   },
   {
     "id": "q3",
@@ -27,12 +27,12 @@
     "id": "q5",
     "category": "simulation",
     "title": "八中WIFI账号和密码是什么？",
-    "content": "一共有10个账号。分别是fly01-fly10。密码分别是cqbzwrj01-cqbzwrj10。"
+    "content": "一共有10个账号。分别是fly01...fly10。密码分别是cqbzwrj01...cqbzwrj10。"
   },
   {
     "id": "q6",
     "category": "simulation",
     "title": "莱特模拟飞行训练系统的账号和密码是什么？",
-    "content": "一共有10个账号。分别是CQ-BZ001~CQ-BZ010，密码全部都是CQbz123。"
+    "content": "一共有10个账号。分别是CQ-BZ001...CQ-BZ010，密码全部都是CQbz123。"
   }
 ]

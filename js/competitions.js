@@ -15,6 +15,7 @@ const competitionsData = [
             '完成指定越障任务获得相应分数',
             '触碰障碍物扣分'
         ],
+        members: ['邓文博', '陈子墨', '杨益睿', '郭一乐', '陈浩龙', '葛玥彤', '范家烨', '居明璁', '黄禹昊', '李金隆'],
         files: [
             { name: '编程挑战赛比赛规则（编程越障任务）.pdf', size: '549 KB', url: 'assets/rules/programming.pdf' }
         ]
@@ -31,6 +32,7 @@ const competitionsData = [
             '正确识别目标获得分数',
             '超时未完成按已识别目标计分'
         ],
+        members: ['杨益睿', '郭一乐', '黄禹昊', '陈浩龙', '居明璁', '李金隆'],
         files: [
             { name: '目标侦察赛比赛规则（侦察救援任务）.pdf', size: '346 KB', url: 'assets/rules/reconnaissance.pdf' }
         ]
@@ -47,6 +49,7 @@ const competitionsData = [
             '飞行过程不得偏离航线过多',
             '降落精准度为主要评分标准'
         ],
+        members: ['苏小恕', '张涵泽', '邱处峰', '兰竣翔', '张浩景', '夏仕航', '蓝子骞', '黄敬哲', '赵敬凯', '费子腾', '陈怡锜', '郭丞璟', '曹益铭', '罗当当', '张晋祎'],
         files: [
             { name: '模拟飞行赛比赛规则（定点返场任务）.pdf', size: '441 KB', url: 'assets/rules/simulation-fixed.pdf' }
         ]
@@ -63,6 +66,7 @@ const competitionsData = [
             '转场进近须符合规范',
             '安全着陆为首要评判标准'
         ],
+        members: ['苏小恕', '夏仕航', '蓝子骞', '黄敬哲', '郭丞璟', '曹益铭', '罗当当', '张晋祎'],
         files: [
             { name: '模拟飞行赛比赛规则（大飞机转场任务）.pdf', size: '300 KB', url: 'assets/rules/simulation-large.pdf' }
         ]
@@ -96,6 +100,15 @@ function renderCompetitions() {
 
         const rulesList = comp.rules.map(r => `<li>${r}</li>`).join('');
 
+        const membersHtml = comp.members && comp.members.length > 0
+            ? `<div class="competition-members">
+                <h4>👥 参赛选手（${comp.members.length}人）</h4>
+                <div class="members-table">
+                    ${comp.members.map((m, i) => `<span class="member-tag">${m}</span>`).join('')}
+                </div>
+               </div>`
+            : '';
+
         return `
             <div class="competition-card" id="${comp.id}">
                 <div class="competition-card-header" onclick="toggleCard(this)">
@@ -107,6 +120,7 @@ function renderCompetitions() {
                         <p>${comp.description}</p>
                         <p><strong>基本规则：</strong></p>
                         <ul style="padding-left:20px; margin:8px 0; color:var(--text-secondary);">${rulesList}</ul>
+                        ${membersHtml}
                         ${filesHtml}
                     </div>
                 </div>

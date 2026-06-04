@@ -932,3 +932,29 @@ a:hover {
   color: var(--text-secondary);
   font-size: 1rem;
 }
+
+/* Competition Members */
+.competition-members {
+  margin-top: 16px;
+}
+
+.competition-members h4 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.members-table {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.member-tag {
+  display: inline-block;
+  padding: 4px 14px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
