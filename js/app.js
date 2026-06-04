@@ -10,6 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRules();
     renderCompetitions();
     initQA();
+
+    // 根据当前 URL 路径显示对应页面
+    const path = window.location.pathname.slice(1) || 'home';
+    const validPages = ['home', 'rules', 'competitions', 'qa'];
+    const page = validPages.includes(path) ? path : 'home';
+    switchPage(page, false);
+
+    // 浏览器前进/后退时切换页面
+    window.addEventListener('popstate', (e) => {
+        const page = e.state?.page || 'home';
+        switchPage(page, false);
+    });
 });
 
 /**
@@ -33,7 +45,7 @@ function initNavigation() {
 /**
  * 切换页面
  */
-function switchPage(pageName) {
+function switchPage(pageName, pushState = true) {
     // 更新导航高亮
     document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.toggle('active', link.dataset.page === pageName);
@@ -43,6 +55,12 @@ function switchPage(pageName) {
     document.querySelectorAll('.page').forEach(page => {
         page.classList.toggle('active', page.id === `page-${pageName}`);
     });
+
+    // 更新 URL
+    const path = pageName === 'home' ? '/' : `/${pageName}`;
+    if (pushState) {
+        history.pushState({ page: pageName }, '', path);
+    }
 
     // 滚动到顶部
     window.scrollTo({ top: 0, behavior: 'smooth' });
