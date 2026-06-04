@@ -31,6 +31,12 @@ const PRESET_QA_LIST = [
     category: 'simulation',
     title: '八中WIFI账号和密码是什么？',
     content: `一共有10个账号。分别是fly01-fly10。密码分别是cqbzwrj01-cqbzwrj10。`
+  },
+  {
+    id: 'q6',
+    category: 'simulation',
+    title: '莱特模拟飞行训练系统的账号和密码是什么？',
+    content: `一共有10个账号。分别是CQ-BZ001~CQ-BZ010，密码全部都是CQbz123。`
   }
 ];
 
