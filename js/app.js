@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initQuickNav();
     renderRules();
     renderCompetitions();
-    initMaterials();
     initQA();
 });
 
