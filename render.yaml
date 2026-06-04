@@ -10,9 +10,13 @@ services:
         value: production
       - key: ADMIN_TOKEN
         sync: false
-      - key: UPLOAD_DIR
-        value: /opt/render/project/src/uploads
-    disk:
-      name: drone-club-data
-      mountPath: /opt/render/project/src/uploads
-      sizeGB: 1
+      - key: S3_ENDPOINT
+        value: https://ofrvhxwwfhjspcsrrmys.supabase.co/storage/v1/s3
+      - key: S3_REGION
+        value: ap-southeast-2
+      - key: S3_ACCESS_KEY_ID
+        value: ofrvhxwwfhjspcsrrmys
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
+      - key: S3_BUCKET
+        value: upload-files

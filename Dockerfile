@@ -3,6 +3,5 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --production
 COPY . .
-RUN mkdir -p uploads
 EXPOSE 3000
 CMD ["node", "server.js"]

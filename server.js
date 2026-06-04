@@ -1,21 +1,14 @@
 const crypto = require('crypto');
 const express = require('express');
 const fs = require('fs/promises');
-const fss = require('fs');
 const path = require('path');
 const { formidable } = require('formidable');
+const store = require('./lib/cloud-store');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, 'uploads');
-const INDEX_PATH = path.join(UPLOAD_DIR, 'index.json');
 const VALID_CATEGORIES = new Set(['training', 'tutorial', 'reference', 'other']);
-
-// Ensure upload directory exists
-if (!fss.existsSync(UPLOAD_DIR)) {
-  fss.mkdirSync(UPLOAD_DIR, { recursive: true });
-}
 
 // --- Utility functions ---
 
@@ -42,20 +35,6 @@ function requireAdmin(req, res) {
   }
 
   return true;
-}
-
-async function readIndex() {
-  try {
-    const data = await fs.readFile(INDEX_PATH, 'utf-8');
-    const parsed = JSON.parse(data);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
-async function writeIndex(materials) {
-  await fs.writeFile(INDEX_PATH, JSON.stringify(materials, null, 2), 'utf-8');
 }
 
 function normalizeField(value, fallback = '') {
@@ -87,6 +66,23 @@ function findMaterial(materials, id) {
   return materials.find((item) => item.id === id);
 }
 
+function guessContentType(fileName) {
+  const ext = fileName.split('.').pop().toLowerCase();
+  const types = {
+    pdf: 'application/pdf',
+    ppt: 'application/vnd.ms-powerpoint',
+    pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    doc: 'application/msword',
+    docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    png: 'image/png',
+    mp4: 'video/mp4',
+    zip: 'application/zip',
+  };
+  return types[ext] || 'application/octet-stream';
+}
+
 // --- API routes ---
 
 // GET /api/materials - List all materials
@@ -94,7 +90,7 @@ function findMaterial(materials, id) {
 app.route('/api/materials')
   .get(async (req, res) => {
     try {
-      const materials = await readIndex();
+      const materials = await store.readIndex();
       sendJson(res, 200, materials);
     } catch (err) {
       sendJson(res, 500, { error: err.message || 'Server error' });
@@ -126,10 +122,10 @@ app.route('/api/materials')
         );
         const id = crypto.randomBytes(8).toString('hex');
         const storedName = `${id}-${originalName}`;
-        const destPath = path.join(UPLOAD_DIR, storedName);
+        const contentType = guessContentType(originalName);
 
-        // Copy uploaded file to uploads directory (rename fails across devices in Docker)
-        await fs.copyFile(file.filepath, destPath);
+        // Upload file to cloud storage (or local filesystem)
+        await store.uploadFile(storedName, file.filepath, contentType);
         try { await fs.unlink(file.filepath); } catch { /* ignore */ }
 
         const material = {
@@ -144,9 +140,9 @@ app.route('/api/materials')
           storedName,
         };
 
-        const materials = await readIndex();
+        const materials = await store.readIndex();
         materials.unshift(material);
-        await writeIndex(materials);
+        await store.writeIndex(materials);
 
         sendJson(res, 201, material);
       } catch (innerErr) {
@@ -161,20 +157,19 @@ app.delete('/api/materials/:id', async (req, res) => {
     if (!requireAdmin(req, res)) return;
 
     const { id } = req.params;
-    const materials = await readIndex();
+    const materials = await store.readIndex();
     const material = findMaterial(materials, id);
     if (!material) {
       sendJson(res, 404, { error: '资料不存在' });
       return;
     }
 
-    // Delete the file from disk
+    // Delete the file from cloud storage (or local filesystem)
     if (material.storedName) {
-      const filePath = path.join(UPLOAD_DIR, material.storedName);
-      try { await fs.unlink(filePath); } catch { /* ignore if file already gone */ }
+      await store.deleteFile(material.storedName);
     }
 
-    await writeIndex(materials.filter((item) => item.id !== id));
+    await store.writeIndex(materials.filter((item) => item.id !== id));
     sendJson(res, 200, { ok: true });
   } catch (err) {
     sendJson(res, 500, { error: err.message || 'Server error' });
@@ -184,22 +179,23 @@ app.delete('/api/materials/:id', async (req, res) => {
 // GET /api/materials/:id/download - Download a material
 app.get('/api/materials/:id/download', async (req, res) => {
   try {
-    const materials = await readIndex();
+    const materials = await store.readIndex();
     const material = findMaterial(materials, req.params.id);
     if (!material || !material.storedName) {
       sendJson(res, 404, { error: '资料不存在' });
       return;
     }
 
-    const filePath = path.join(UPLOAD_DIR, material.storedName);
-    try {
-      await fs.access(filePath);
-    } catch {
+    const stream = await store.getFileStream(material.storedName);
+    if (!stream) {
       sendJson(res, 404, { error: '文件不存在' });
       return;
     }
 
-    res.download(filePath, material.originalName || material.storedName);
+    const downloadName = material.originalName || material.storedName;
+    res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(downloadName)}`);
+    res.setHeader('Content-Type', guessContentType(downloadName));
+    stream.pipe(res);
   } catch (err) {
     sendJson(res, 500, { error: err.message || 'Server error' });
   }
@@ -211,7 +207,8 @@ app.use(express.static(path.join(__dirname)));
 // Start server (only when run directly, not when required by tests)
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`Drone Club server running on port ${PORT}`);
+    const mode = store.isCloudEnabled() ? 'cloud (S3)' : 'local filesystem';
+    console.log(`Drone Club server running on port ${PORT} (storage: ${mode})`);
   });
 }
 
@@ -220,8 +217,8 @@ module.exports = {
   sendJson,
   getBearerToken,
   requireAdmin,
-  readIndex,
-  writeIndex,
+  readIndex: () => store.readIndex(),
+  writeIndex: (m) => store.writeIndex(m),
   normalizeField,
   normalizeCategory,
   sanitizeFileName,
