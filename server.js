@@ -202,7 +202,12 @@ app.get('/api/materials/:id/download', async (req, res) => {
 });
 
 // Serve static files (frontend)
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname), { index: false }));
+
+// Serve index.html for all non-API, non-static routes (SPA fallback)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Start server (only when run directly, not when required by tests)
 if (require.main === module) {
