@@ -7,7 +7,7 @@ const competitionsData = [
         id: 'programming',
         title: '编程挑战赛',
         icon: '💻',
-        badge: '热门',
+        badge: '编程',
         description: '参赛选手通过编写程序控制无人机完成指定任务。考验选手的编程能力、逻辑思维和任务规划能力。选手需在规定时间内完成航线规划、目标识别、精准降落等编程挑战。',
         rules: [
             '比赛形式为编程越障任务',
@@ -15,7 +15,7 @@ const competitionsData = [
             '完成指定越障任务获得相应分数',
             '触碰障碍物扣分'
         ],
-        members: ['邓文博', '陈子墨', '杨益睿', '郭一乐', '陈浩龙', '葛玥彤', '范家烨', '居明璁', '黄禹昊', '李金隆'],
+        members: ['陈浩龙', '陈子墨', '邓文博', '范家烨', '葛玥彤', '郭一乐', '黄禹昊', '居明璁', '李金隆', '杨益睿'],
         files: [
             { name: '编程挑战赛比赛规则（编程越障任务）.pdf', size: '549 KB', url: 'assets/rules/programming.pdf' }
         ]
@@ -24,7 +24,7 @@ const competitionsData = [
         id: 'reconnaissance',
         title: '目标侦察赛',
         icon: '🔍',
-        badge: '竞技',
+        badge: '编程',
         description: '参赛选手操控无人机在指定区域内搜索并识别目标。考验选手的飞行操控技巧、观察能力和快速反应能力。需要在复杂环境中精准定位目标并完成侦察任务。',
         rules: [
             '比赛形式为侦察救援任务',
@@ -32,7 +32,7 @@ const competitionsData = [
             '正确识别目标获得分数',
             '超时未完成按已识别目标计分'
         ],
-        members: ['杨益睿', '郭一乐', '黄禹昊', '陈浩龙', '居明璁', '李金隆'],
+        members: ['陈浩龙', '郭一乐', '黄禹昊', '居明璁', '李金隆', '杨益睿'],
         files: [
             { name: '目标侦察赛比赛规则（侦察救援任务）.pdf', size: '346 KB', url: 'assets/rules/reconnaissance.pdf' }
         ]
@@ -49,7 +49,7 @@ const competitionsData = [
             '飞行过程不得偏离航线过多',
             '降落精准度为主要评分标准'
         ],
-        members: ['苏小恕', '张涵泽', '邱处峰', '兰竣翔', '张浩景', '夏仕航', '蓝子骞', '黄敬哲', '赵敬凯', '费子腾', '陈怡锜', '郭丞璟', '曹益铭', '罗当当', '张晋祎'],
+        members: ['曹益铭', '陈怡锜', '费子腾', '郭丞璟', '黄敬哲', '兰竣翔', '蓝子骞', '罗当当', '邱处峰', '苏小恕', '夏仕航', '张涵泽', '张浩景', '张晋祎', '赵敬凯'],
         files: [
             { name: '模拟飞行赛比赛规则（定点返场任务）.pdf', size: '441 KB', url: 'assets/rules/simulation-fixed.pdf' }
         ]
@@ -66,7 +66,7 @@ const competitionsData = [
             '转场进近须符合规范',
             '安全着陆为首要评判标准'
         ],
-        members: ['苏小恕', '夏仕航', '蓝子骞', '黄敬哲', '郭丞璟', '曹益铭', '罗当当', '张晋祎'],
+        members: ['曹益铭', '郭丞璟', '黄敬哲', '蓝子骞', '罗当当', '苏小恕', '夏仕航', '张晋祎'],
         files: [
             { name: '模拟飞行赛比赛规则（大飞机转场任务）.pdf', size: '300 KB', url: 'assets/rules/simulation-large.pdf' }
         ]
@@ -102,7 +102,7 @@ function renderCompetitions() {
 
         const membersHtml = comp.members && comp.members.length > 0
             ? `<div class="competition-members">
-                <h4>👥 参赛选手（${comp.members.length}人）</h4>
+                <h4>👥 参赛选手（${comp.members.length}人）<small style="font-weight:normal;font-size:0.8em;color:var(--text-secondary);margin-left:8px;">按姓氏拼音排序</small></h4>
                 <div class="members-table">
                     ${comp.members.map((m, i) => `<span class="member-tag">${m}</span>`).join('')}
                 </div>
