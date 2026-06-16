@@ -10,10 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRules();
     renderCompetitions();
     initQA();
+    renderScores();
 
     // 根据当前 URL 路径显示对应页面
     const path = window.location.pathname.slice(1) || 'home';
-    const validPages = ['home', 'rules', 'competitions', 'qa'];
+    const validPages = ['home', 'rules', 'competitions', 'qa', 'scores'];
     const page = validPages.includes(path) ? path : 'home';
     switchPage(page, false);
 

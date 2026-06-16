@@ -958,3 +958,88 @@ a:hover {
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+/* ===== 成绩公示表格 ===== */
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.score-table thead th {
+  background: var(--primary);
+  color: white;
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid var(--primary-dark);
+}
+
+.score-table thead th:not(:first-child) {
+  min-width: 80px;
+}
+
+.score-table tbody td {
+  padding: 10px 14px;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.score-table tbody tr:nth-child(even) {
+  background: #f8f9ff;
+}
+
+.score-table tbody tr:hover {
+  background: var(--primary-light);
+}
+
+.score-table .name-cell {
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  padding-left: 18px;
+}
+
+.score-table .grade-separator td {
+  background: #eef1f7;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--primary-dark);
+  text-align: left;
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+}
+
+.score-note {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+
+/* 响应式表格：小屏滚动 */
+@media (max-width: 768px) {
+  .score-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .score-table {
+    min-width: 600px;
+  }
+
+  .score-table thead th,
+  .score-table tbody td {
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+}
