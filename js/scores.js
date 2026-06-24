@@ -8,7 +8,7 @@
 
 const scoreData = [
     // ===== 高2027届 =====
-    { name: "张晋祎", cls: 3, grade: 28, programming: null, rescue: null, landing: 69.165, ferry: 43,
+    { name: "张晋祎", cls: 3, grade: 25, programming: null, rescue: null, landing: 69.165, ferry: 43,
       awards: { landing: "三等奖", ferry: "三等奖" } },
     // ===== 高2028届（初27届）=====
     { name: "陈浩龙", cls: 7, grade: 27, programming: 20, rescue: 35, landing: null, ferry: null,
