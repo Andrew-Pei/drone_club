@@ -15,7 +15,7 @@ const scoreData = [
       awards: { programming: "三等奖", rescue: "三等奖" } },
     { name: "郭一乐", cls: 7, grade: 27, programming: 80, rescue: 35, landing: null, ferry: null,
       awards: { programming: "一等奖", rescue: "三等奖" } },
-    { name: "葛玥彤", cls: 8, grade: 27, programming: 40, rescue: null, landing: null, ferry: null,
+    { name: "葛玥彤", cls: 8, grade: 27, programming: 60, rescue: null, landing: null, ferry: null,
       awards: { programming: "二等奖" } },
     { name: "范家烨", cls: 8, grade: 27, programming: 40, rescue: null, landing: null, ferry: null,
       awards: { programming: "三等奖" } },
