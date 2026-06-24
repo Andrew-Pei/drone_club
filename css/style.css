@@ -564,6 +564,14 @@ a:hover {
     background: var(--border);
 }
 
+/* ===== 成绩筛选 ===== */
+.scores-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
 /* ===== 资料筛选 ===== */
 .materials-filter {
     display: flex;

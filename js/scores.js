@@ -1,6 +1,7 @@
 /**
  * 成绩公示
  * 八中无人机社团比赛成绩汇总
+ * 支持按赛项筛选
  */
 
 const scoreData = [
@@ -32,52 +33,70 @@ const scoreData = [
 ];
 
 /**
+ * 赛项字段映射
+ */
+const categoryFields = {
+    programming: { label: '编程越障', key: 'programming' },
+    rescue:      { label: '侦察救援',  key: 'rescue' },
+    landing:     { label: '定点返场',  key: 'landing' },
+    ferry:       { label: '大飞机转场', key: 'ferry' }
+};
+
+/** 当前选中的赛项 */
+let currentCategory = 'all';
+
+/**
  * 格式化成绩显示：空值显示为"—"
  */
 function formatScore(val) {
     if (val === null || val === undefined || val === '') return '—';
-    // 如果是整数则显示整数，否则保留合理小数位数
     if (Number.isInteger(val)) return val.toString();
     return val;
 }
 
 /**
- * 渲染成绩表格
+ * 排序函数：年级降序、班级升序
  */
-function renderScores() {
-    const container = document.getElementById('scores-content');
-    if (!container) return;
-
-    // 按年级和班级排序（年级降序、班级升序）
-    const sorted = [...scoreData].sort((a, b) => {
+function sortStudents(students) {
+    return [...students].sort((a, b) => {
         if (b.grade !== a.grade) return b.grade - a.grade;
         return a.cls - b.cls;
     });
+}
 
-    const theadRows = `
-        <table class="score-table">
-            <thead>
-                <tr>
-                    <th rowspan="2">姓名</th>
-                    <th rowspan="2">班级</th>
-                    <th rowspan="2">年级</th>
-                    <th colspan="4">比赛成绩</th>
-                </tr>
-                <tr>
-                    <th>编程越障</th>
-                    <th>侦察救援</th>
-                    <th>定点返场</th>
-                    <th>大飞机转场</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+/**
+ * 渲染成绩表格
+ * @param {string} category - 'all' | 'programming' | 'rescue' | 'landing' | 'ferry'
+ */
+function renderScores(category) {
+    const container = document.getElementById('scores-content');
+    if (!container) return;
+
+    category = category || currentCategory;
+    currentCategory = category;
+
+    // 更新筛选按钮高亮
+    document.querySelectorAll('#scoresFilter .filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === category);
+    });
+
+    if (category === 'all') {
+        renderAllScores(container);
+    } else {
+        renderCategoryScores(container, category);
+    }
+}
+
+/**
+ * 渲染全部赛项（原有效果）
+ */
+function renderAllScores(container) {
+    const sorted = sortStudents(scoreData);
 
     let currentGrade = null;
     let tbodyRows = '';
 
-    sorted.forEach((s, i) => {
-        // 年级分组标记
+    sorted.forEach(s => {
         let gradeRow = '';
         if (s.grade !== currentGrade) {
             currentGrade = s.grade;
@@ -100,10 +119,104 @@ function renderScores() {
 
     container.innerHTML = `
         <div class="score-table-wrapper">
-        ${theadRows}
-            ${tbodyRows}
-        </tbody></table>
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2">姓名</th>
+                        <th rowspan="2">班级</th>
+                        <th rowspan="2">年级</th>
+                        <th colspan="4">比赛成绩</th>
+                    </tr>
+                    <tr>
+                        <th>编程越障</th>
+                        <th>侦察救援</th>
+                        <th>定点返场</th>
+                        <th>大飞机转场</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tbodyRows}
+                </tbody>
+            </table>
         </div>
         <p class="score-note">注："—" 表示该学生未参加对应赛项</p>
     `;
 }
+
+/**
+ * 渲染单个赛项筛选视图
+ */
+function renderCategoryScores(container, category) {
+    const field = categoryFields[category];
+    if (!field) return;
+
+    // 筛选出参加了该赛项的学生（成绩不为 null）
+    const filtered = scoreData.filter(s => s[field.key] !== null && s[field.key] !== undefined);
+    const sorted = sortStudents(filtered);
+
+    let currentGrade = null;
+    let tbodyRows = '';
+
+    sorted.forEach(s => {
+        let gradeRow = '';
+        if (s.grade !== currentGrade) {
+            currentGrade = s.grade;
+            // 筛选视图只显示 4 列：姓名、班级、年级、赛项成绩
+            gradeRow = `<tr class="grade-separator"><td colspan="4">初${s.grade}届</td></tr>`;
+        }
+
+        tbodyRows += `
+            ${gradeRow}
+            <tr>
+                <td class="name-cell">${s.name}</td>
+                <td>${s.cls}</td>
+                <td>${s.grade}</td>
+                <td>${formatScore(s[field.key])}</td>
+            </tr>
+        `;
+    });
+
+    const participantCount = sorted.length;
+
+    container.innerHTML = `
+        <div class="score-table-wrapper">
+            <table class="score-table">
+                <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>班级</th>
+                        <th>年级</th>
+                        <th>${field.label}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tbodyRows || `<tr><td colspan="4" style="padding:32px;color:var(--text-secondary);">暂无参赛记录</td></tr>`}
+                </tbody>
+            </table>
+        </div>
+        <p class="score-note">共 ${participantCount} 名同学参加「${field.label}」赛项</p>
+    `;
+}
+
+/**
+ * 初始化筛选功能
+ */
+function initScoreFilter() {
+    const filterContainer = document.getElementById('scoresFilter');
+    if (!filterContainer) return;
+
+    filterContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+
+        const category = btn.dataset.category;
+        if (category === currentCategory) return;
+
+        renderScores(category);
+    });
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', () => {
+    initScoreFilter();
+});
