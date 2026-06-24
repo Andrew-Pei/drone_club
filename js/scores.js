@@ -1,35 +1,65 @@
 /**
  * 成绩公示
  * 八中无人机社团比赛成绩汇总
- * 支持按赛项筛选
+ * 支持按赛项筛选，显示获奖等级
+ *
+ * 奖项来源：第十届全国青少年无人机大赛重庆市赛奖项公示
  */
 
 const scoreData = [
-    { name: "张晋祎", cls: 3, grade: 25, programming: null, rescue: null, landing: 69.165, ferry: 43 },
-    { name: "陈浩龙", cls: 7, grade: 27, programming: 20, rescue: 35, landing: null, ferry: null },
-    { name: "郭一乐", cls: 7, grade: 27, programming: 80, rescue: 35, landing: null, ferry: null },
-    { name: "葛玥彤", cls: 8, grade: 27, programming: 40, rescue: null, landing: null, ferry: null },
-    { name: "范家烨", cls: 8, grade: 27, programming: 40, rescue: null, landing: null, ferry: null },
-    { name: "郭丞璟", cls: 16, grade: 27, programming: null, rescue: null, landing: 96.28, ferry: 0 },
-    { name: "曹益铭", cls: 16, grade: 27, programming: null, rescue: null, landing: 76.532, ferry: 0 },
-    { name: "罗当当", cls: 16, grade: 27, programming: null, rescue: null, landing: 99.32, ferry: 0 },
-    { name: "黄禹昊", cls: 16, grade: 27, programming: 70, rescue: 95, landing: null, ferry: null },
-    { name: "李金隆", cls: 16, grade: 27, programming: 60, rescue: 90, landing: null, ferry: null },
-    { name: "居明璁", cls: 16, grade: 27, programming: 20, rescue: 90, landing: null, ferry: null },
-    { name: "苏小恕", cls: 1, grade: 28, programming: null, rescue: null, landing: 56.955, ferry: 50.94 },
-    { name: "张涵泽", cls: 1, grade: 28, programming: null, rescue: null, landing: 64.542, ferry: null },
-    { name: "邱处峰", cls: 2, grade: 28, programming: null, rescue: null, landing: 70.182, ferry: null },
-    { name: "兰竣翔", cls: 2, grade: 28, programming: null, rescue: null, landing: 87.312, ferry: null },
-    { name: "张浩景", cls: 2, grade: 28, programming: null, rescue: null, landing: 77.533, ferry: null },
-    { name: "夏仕航", cls: 2, grade: 28, programming: null, rescue: null, landing: 68.424, ferry: 0 },
-    { name: "蓝子骞", cls: 3, grade: 28, programming: null, rescue: null, landing: 99.007, ferry: 95.1 },
-    { name: "邓文博", cls: 8, grade: 28, programming: 40, rescue: null, landing: null, ferry: null },
-    { name: "黄敬哲", cls: 13, grade: 28, programming: null, rescue: null, landing: 59.18, ferry: 33.79 },
-    { name: "陈子墨", cls: 13, grade: 28, programming: 50, rescue: null, landing: null, ferry: null },
-    { name: "杨益睿", cls: 13, grade: 28, programming: 40, rescue: 95, landing: null, ferry: null },
-    { name: "赵敬凯", cls: 15, grade: 28, programming: null, rescue: null, landing: 35.957, ferry: null },
-    { name: "费子腾", cls: 17, grade: 28, programming: null, rescue: null, landing: 63.893, ferry: null },
-    { name: "陈怡锜", cls: 20, grade: 28, programming: null, rescue: null, landing: 62.408, ferry: null }
+    // ===== 高2027届 =====
+    { name: "张晋祎", cls: 3, grade: 25, programming: null, rescue: null, landing: 69.165, ferry: 43,
+      awards: { landing: "三等奖", ferry: "三等奖" } },
+    // ===== 高2028届（初27届）=====
+    { name: "陈浩龙", cls: 7, grade: 27, programming: 20, rescue: 35, landing: null, ferry: null,
+      awards: { programming: "三等奖", rescue: "三等奖" } },
+    { name: "郭一乐", cls: 7, grade: 27, programming: 80, rescue: 35, landing: null, ferry: null,
+      awards: { programming: "一等奖", rescue: "三等奖" } },
+    { name: "葛玥彤", cls: 8, grade: 27, programming: 40, rescue: null, landing: null, ferry: null,
+      awards: { programming: "二等奖" } },
+    { name: "范家烨", cls: 8, grade: 27, programming: 40, rescue: null, landing: null, ferry: null,
+      awards: { programming: "三等奖" } },
+    { name: "郭丞璟", cls: 16, grade: 27, programming: null, rescue: null, landing: 96.28, ferry: 0,
+      awards: { landing: "一等奖" } },
+    { name: "曹益铭", cls: 16, grade: 27, programming: null, rescue: null, landing: 76.532, ferry: 0,
+      awards: { landing: "三等奖", ferry: "三等奖" } },
+    { name: "罗当当", cls: 16, grade: 27, programming: null, rescue: null, landing: 99.32, ferry: 0,
+      awards: { landing: "一等奖", ferry: "三等奖" } },
+    { name: "黄禹昊", cls: 16, grade: 27, programming: 70, rescue: 95, landing: null, ferry: null,
+      awards: { programming: "一等奖", rescue: "一等奖" } },
+    { name: "李金隆", cls: 16, grade: 27, programming: 60, rescue: 90, landing: null, ferry: null,
+      awards: { programming: "二等奖", rescue: "三等奖" } },
+    { name: "居明璁", cls: 16, grade: 27, programming: 20, rescue: 90, landing: null, ferry: null,
+      awards: { programming: "三等奖", rescue: "三等奖" } },
+    // ===== 高2029届（初28届）=====
+    { name: "苏小恕", cls: 1, grade: 28, programming: null, rescue: null, landing: 56.955, ferry: 50.94,
+      awards: { landing: "三等奖", ferry: "三等奖" } },
+    { name: "张涵泽", cls: 1, grade: 28, programming: null, rescue: null, landing: 64.542, ferry: null,
+      awards: { landing: "三等奖" } },
+    { name: "邱处峰", cls: 2, grade: 28, programming: null, rescue: null, landing: 70.182, ferry: null,
+      awards: { landing: "三等奖" } },
+    { name: "兰竣翔", cls: 2, grade: 28, programming: null, rescue: null, landing: 87.312, ferry: null,
+      awards: { landing: "二等奖" } },
+    { name: "张浩景", cls: 2, grade: 28, programming: null, rescue: null, landing: 77.533, ferry: null,
+      awards: { landing: "二等奖" } },
+    { name: "夏仕航", cls: 2, grade: 28, programming: null, rescue: null, landing: 68.424, ferry: 0,
+      awards: { landing: "三等奖", ferry: "三等奖" } },
+    { name: "蓝子骞", cls: 3, grade: 28, programming: null, rescue: null, landing: 99.007, ferry: 95.1,
+      awards: { landing: "一等奖", ferry: "一等奖" } },
+    { name: "邓文博", cls: 8, grade: 28, programming: 40, rescue: null, landing: null, ferry: null,
+      awards: { programming: "三等奖" } },
+    { name: "黄敬哲", cls: 13, grade: 28, programming: null, rescue: null, landing: 59.18, ferry: 33.79,
+      awards: { landing: "三等奖", ferry: "三等奖" } },
+    { name: "陈子墨", cls: 13, grade: 28, programming: 50, rescue: null, landing: null, ferry: null,
+      awards: { programming: "三等奖" } },
+    { name: "杨益睿", cls: 13, grade: 28, programming: 40, rescue: 95, landing: null, ferry: null,
+      awards: { programming: "三等奖", rescue: "一等奖" } },
+    { name: "赵敬凯", cls: 15, grade: 28, programming: null, rescue: null, landing: 35.957, ferry: null,
+      awards: {} },
+    { name: "费子腾", cls: 17, grade: 28, programming: null, rescue: null, landing: 63.893, ferry: null,
+      awards: { landing: "三等奖" } },
+    { name: "陈怡锜", cls: 20, grade: 28, programming: null, rescue: null, landing: 62.408, ferry: null,
+      awards: { landing: "三等奖" } }
 ];
 
 /**
@@ -52,6 +82,19 @@ function formatScore(val) {
     if (val === null || val === undefined || val === '') return '—';
     if (Number.isInteger(val)) return val.toString();
     return val;
+}
+
+/**
+ * 获取奖项标签HTML
+ */
+function awardBadge(award) {
+    if (!award) return '';
+    const colorMap = {
+        '一等奖': '#c62828',
+        '二等奖': '#e65100',
+        '三等奖': '#2e7d32'
+    };
+    return `<span class="award-badge" style="background:${colorMap[award] || '#666'}">${award}</span>`;
 }
 
 /**
@@ -88,7 +131,7 @@ function renderScores(category) {
 }
 
 /**
- * 渲染全部赛项（原有效果）
+ * 渲染全部赛项
  */
 function renderAllScores(container) {
     const sorted = sortStudents(scoreData);
@@ -103,16 +146,23 @@ function renderAllScores(container) {
             gradeRow = `<tr class="grade-separator"><td colspan="7">初${s.grade}届</td></tr>`;
         }
 
+        // 收集该学生所有赛项的奖项
+        const awardCells = ['programming', 'rescue', 'landing', 'ferry'].map(key => {
+            const score = s[key];
+            const award = s.awards ? s.awards[key] : null;
+            if (score === null || score === undefined) {
+                return '<td>—</td>';
+            }
+            return `<td>${formatScore(score)}${award ? '<br>' + awardBadge(award) : ''}</td>`;
+        }).join('\n                ');
+
         tbodyRows += `
             ${gradeRow}
             <tr>
                 <td class="name-cell">${s.name}</td>
                 <td>${s.cls}</td>
                 <td>${s.grade}</td>
-                <td>${formatScore(s.programming)}</td>
-                <td>${formatScore(s.rescue)}</td>
-                <td>${formatScore(s.landing)}</td>
-                <td>${formatScore(s.ferry)}</td>
+                ${awardCells}
             </tr>
         `;
     });
@@ -139,7 +189,7 @@ function renderAllScores(container) {
                 </tbody>
             </table>
         </div>
-        <p class="score-note">注："—" 表示该学生未参加对应赛项</p>
+        <p class="score-note">注："—" 表示该学生未参加对应赛项；奖项标注为第十届全国青少年无人机大赛重庆市赛获奖等级</p>
     `;
 }
 
@@ -150,7 +200,7 @@ function renderCategoryScores(container, category) {
     const field = categoryFields[category];
     if (!field) return;
 
-    // 筛选出参加了该赛项的学生（成绩不为 null）
+    // 筛选出参加了该赛项的学生
     const filtered = scoreData.filter(s => s[field.key] !== null && s[field.key] !== undefined);
     const sorted = sortStudents(filtered);
 
@@ -161,9 +211,10 @@ function renderCategoryScores(container, category) {
         let gradeRow = '';
         if (s.grade !== currentGrade) {
             currentGrade = s.grade;
-            // 筛选视图只显示 4 列：姓名、班级、年级、赛项成绩
-            gradeRow = `<tr class="grade-separator"><td colspan="4">初${s.grade}届</td></tr>`;
+            gradeRow = `<tr class="grade-separator"><td colspan="5">初${s.grade}届</td></tr>`;
         }
+
+        const award = s.awards ? s.awards[field.key] : null;
 
         tbodyRows += `
             ${gradeRow}
@@ -172,6 +223,7 @@ function renderCategoryScores(container, category) {
                 <td>${s.cls}</td>
                 <td>${s.grade}</td>
                 <td>${formatScore(s[field.key])}</td>
+                <td>${award ? awardBadge(award) : '—'}</td>
             </tr>
         `;
     });
@@ -187,10 +239,11 @@ function renderCategoryScores(container, category) {
                         <th>班级</th>
                         <th>年级</th>
                         <th>${field.label}</th>
+                        <th>获奖等级</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${tbodyRows || `<tr><td colspan="4" style="padding:32px;color:var(--text-secondary);">暂无参赛记录</td></tr>`}
+                    ${tbodyRows || `<tr><td colspan="5" style="padding:32px;color:var(--text-secondary);">暂无参赛记录</td></tr>`}
                 </tbody>
             </table>
         </div>
